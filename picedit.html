@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style type="text/css">
+    body {
+      background-color: #f8f4e6;
+      color: #433d3c;
+    }
+
+    button,
+    input {
+      color: #433d3c;
+      padding: 2px;
+      margin: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <label for="file">加工したいファイルを選択してください(。-∀-)</label><input type="file" id="file">
+  <button id="crop" type="button"><i class="material-icons">crop</i>切り抜き</button>
+
+  <button id="balloon1" type="button""><i class=" material-icons">chat_bubble</i>吹き出し</button>
+  <button id="addText" type="button"><i class="material-icons">text_fields</i>文字</button>
+  文字サイズ：小<input type="range" min="10" max="500" step="1" id="textRange">大
+  <button id="zDown" type="button"><i class="material-icons">arrow_drop_down</i>一番下へ</button>
+  <button id="zUp" type="button"><i class="material-icons">arrow_drop_up</i>一番上へ</button>
+  <button id="remove" type="button"><i class="material-icons">delete</i>削除</button>
+  <button id="dl" type="button"><i class="material-icons">save_alt</i>保存</button>
+  / おまけ
+  <button id="keikaku" type="button"><i class="material-icons">sentiment_satisfied</i>計画通り</button>
+  <button id="copyRight" type="button"><i class="material-icons">copyright</i>copyright FFXIV</button>
+  <button id="gifAnimation" type="button"><i class="material-icons">save_alt</i>Gifアニメで保存</button>
+
+  </div>
+  <div id="layers">
+    <canvas id="canvas1"></canvas>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.3/fabric.min.js"></script>
+  <script src="lib/LZWEncoder.js"></script>
+  <script src="lib/NeuQuant.js"></script>
+  <script src="lib/GIFEncoder.js"></script>
+  <script src="lib/b64.js"></script>
+  <script>
+    WebFont.load({
+      google: {
+        families: ['Noto Serif JP', 'Roboto']
+      },
+      active: function () {
+
+        const file = document.querySelector('input[type=file]');
+        const download = document.querySelector('#dl');
+        const crop = document.querySelector('#crop');
+        const keikaku = document.querySelector('#keikaku');
+        const balloon1 = document.querySelector('#balloon1');
+        const addText = document.querySelector('#addText');
+        const copyRight = document.querySelector('#copyRight');
+        const textRange = document.querySelector('#textRange');
+        const remove = document.querySelector('#remove');
+        const zUp = document.querySelector('#zUp');
+        const zDown = document.querySelector('#zDown');
+        const gifAnimation = document.querySelector('#gifAnimation');
+
+        const canvas = new fabric.Canvas('canvas1');
+        const addedTextAndBalloon = [];
+
+        let image;
+
+        fabric.Object.prototype.set({
+          transparentCorners: false,
+          borderColor: '#ff00ff',
+          cornerColor: '#ff0000'
+        });
+
+        file.addEventListener('change',
+          function (e) {
+            const fileData = e.target.files[0];
+            const reader = new FileReader();
+            new Promise((resolve) => {
+              reader.onload = () => {
+                resolve(reader.result)
+              }
+              reader.readAsDataURL(fileData);
+            }).then((result) => {
+              fabric.Image.fromURL(result, (img) => {
+                canvas.clear();
+                canvas.setWidth(img.width);
+                canvas.setHeight(img.height);
+                img.selectable = false;
+                canvas.add(img);
+                image = img;
+                canvas.renderAll();
+              });
+            });
+          }, false);
+
+        let cropBox;
+        crop.addEventListener('click',
+          function (e) {
+            if (cropBox == null) {
+              cropBox = new fabric.Textbox('この矩形のサイズを調整した後\nもう一度切り抜きボタンを押すと\n矩形にあわせて切り抜きます',
+                {
+                  backgroundColor: 'blue', left: 10, top: 10, fontFamily: 'Noto Serif JP', fill: '#fff', opacity: 0.5,
+                });
+
+              canvas.add(cropBox);
+              canvas.renderAll();
+            } else {
+              const rect = cropBox.getBoundingRect();
+              image.cloneAsImage((img) => {
+                canvas.clear();
+                canvas.setWidth(rect.width);
+                canvas.setHeight(rect.height);
+                img.selectable = false;
+                canvas.add(img);
+                image = img;
+                cropBox = null;
+                canvas.renderAll();
+              }, {
+                left: rect.left,
+                top: rect.top,
+                width: rect.width,
+                height: rect.height
+              });
+            }
+          }, false);
+
+        download.addEventListener('click',
+          (e) => {
+            const rawUrl = canvas.toDataURL({
+              format: 'png',
+              quality: 1
+            });
+
+            const parse = rawUrl.slice(5).split(/[,;]/);
+            const binStr = atob(parse.pop());
+            const l = binStr.length;
+            const array = new Uint8Array(l);
+
+            for (let i = 0; i < l; i++) {
+              array[i] = binStr.charCodeAt(i);
+            }
+            const blob = new Blob([array], { type: parse[0] });
+            const blobUrl = URL.createObjectURL(blob);
+
+            const tmpLink = document.createElement('a');
+            tmpLink.href = blobUrl;
+            tmpLink.download = "output.png";
+            tmpLink.click();
+            URL.revokeObjectURL(blobUrl);
+          }, false);
+
+        keikaku.addEventListener('click',
+          (e) => {
+            const rect = image.getBoundingRect();
+            const textSize = rect.height / 5;
+            const smallTextSize = textSize / 5;
+            const textBox = new fabric.Textbox('計\n画\n通\nり', {
+              left: 10,
+              top: 10,
+              fontSize: textSize,
+              fill: '#000000',
+              shadow: '#ffffff 0px 0px 20px',
+              fontWeight: 'bold',
+              fontFamily: 'Noto Serif JP',
+              lineHeight: 1
+            });
+
+            const smallTextBox = new fabric.Textbox('\nけ\n\nい\n\n\nか\n\nく\n\n\nど\n\nお', {
+              left: 10 + textSize + 5,
+              top: 10,
+              fontSize: smallTextSize,
+              fill: '#000000',
+              shadow: '#ffffff 0px 0px 10px',
+              fontWeight: 'bold',
+              fontFamily: 'Noto Serif JP',
+              lineHeight: 1
+            });
+
+            canvas.add(textBox);
+            canvas.setActiveObject(textBox);
+            canvas.add(smallTextBox);
+            canvas.renderAll();
+          }, false);
+
+        const balloon1Svg = '<svg version="1.1" id="_x34_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 800 558.2" style="enable-background:new 0 0 800 558.2;" xml:space="preserve"><style type="text/css">.stblack{fill:#000000;}.st0{fill:#FFFFFF;}</style><g><path class="stblack" d="M344.5,14C327.7,93.5,152.9,153.5,20,108.4c100.4,70.8,103.8,230.2,0,283.5c112.4-15.6,235.7,77,223.8,152.4c79.4-60.3,275.9-73.7,343.2-4.5c-27.8-79.5,85.3-175.5,193.1-168.4c-101-46.5-99.2-192.1-20.5-254.7c-109.5,35.2-186.7,9.4-143.8-53.4C545.4,109,375.7,83.3,344.5,14z"></path><path class="st0" d="M257.2,519c-3.5-20.1-14-40.9-30.7-60.6c-38.1-44.7-101.5-76-162.4-81.5c26.8-26.7,43-63.4,46-105.5c3.5-50.1-12.3-99.2-42.6-137.3c16.6,2.5,33.9,3.7,51.6,3.7c0,0,0,0,0,0c101.9,0,196-40.7,228.6-94.9c35.5,37.6,107.6,57.2,170.2,57.2c26.7,0,51.2-3.4,72-10c-1.1,10.5,1.4,18.9,4.6,25c10.7,20.2,37.6,31.3,75.7,31.3c14.7,0,30.8-1.6,47.7-4.8c-22.9,34.6-33.7,78.7-28.5,122c4.7,38.7,21.5,72,47.6,95.8c-56.7,9.3-113,42.2-144.3,86.3c-14.6,20.5-22.6,42-23.9,62.8c-33.4-19-80.6-29.5-135.2-29.5C368,479.2,302,494.4,257.2,519z"></path></g></svg>';
+
+        balloon1.addEventListener('click',
+          (e) => {
+            var path = fabric.loadSVGFromString(balloon1Svg, function (objects, options) {
+              var obj = fabric.util.groupSVGElements(objects, options);
+              obj.scaleX = canvas.width / obj.width / 2;
+              obj.scaleY = canvas.height / obj.height / 2;
+              canvas.setActiveObject(obj);
+              addedTextAndBalloon.push(obj);
+              canvas.add(obj).renderAll();
+            });
+          }, false);
+
+        addText.addEventListener('click',
+          (e) => {
+            const textSize = image.height / 5;
+            const textBox = new fabric.Textbox('Text', {
+              left: 10,
+              top: 10,
+              fontSize: textSize,
+              fill: '#000000',
+              shadow: '#ffffff 0px 0px 3px',
+              fontWeight: 'bold',
+              fontFamily: 'Noto Serif JP',
+              lineHeight: 1
+            });
+            textBox.on('selected', function () {
+              textRange.value = textBox.fontSize;
+            });
+            canvas.add(textBox);
+            canvas.setActiveObject(textBox);
+            addedTextAndBalloon.push(textBox);
+            canvas.renderAll();
+
+          }, false);
+
+        copyRight.addEventListener('click',
+          (e) => {
+            const textSize = image.height / 5;
+            const textBox = new fabric.Textbox('Copyright (C) SQUARE ENIX CO., LTD. All Rights Reserved.', {
+              left: 10,
+              top: 10,
+              fontSize: 14,
+              fill: '#ffffff',
+              strokeWidth: 1,
+              stroke: "#000000",
+              fontFamily: 'Noto Roboto',
+              lineHeight: 1,
+              fontWeight: 'bold',
+              breakWords: false
+            });
+            textBox.on('selected', function () {
+              textRange.value = textBox.fontSize;
+            });
+            canvas.add(textBox);
+            canvas.setActiveObject(textBox);
+            canvas.renderAll();
+          }, false);
+
+        textRange.addEventListener('input',
+          (e) => {
+            const object = canvas.getActiveObject();
+            if (object.type == "textbox") {
+              object.fontSize = e.currentTarget.value;
+              canvas.setActiveObject(object);
+            }
+            canvas.renderAll();
+          }, false);
+
+        zUp.addEventListener('click',
+          (e) => {
+            const object = canvas.getActiveObject();
+            object.moveTo(canvas._objects.length - 1);
+            canvas.renderAll();
+          }, false);
+
+        zDown.addEventListener('click',
+          (e) => {
+            const object = canvas.getActiveObject();
+            object.moveTo(1);
+            canvas.renderAll();
+          }, false);
+
+        remove.addEventListener('click',
+          (e) => {
+            const object = canvas.getActiveObject();
+            canvas.remove(object);
+            canvas.renderAll();
+          }, false);
+
+        gifAnimation.addEventListener('click',
+          (e) => {
+            const encoder = new GIFEncoder();
+            encoder.setRepeat(0); // 0 = loop
+            encoder.setDelay(100); //go to next frame every n milliseconds
+            encoder.start();
+            const addedTextPos = [];
+            for(let i = 0, n = addedTextAndBalloon.length; i < n; ++i){
+              addedTextPos.push([addedTextAndBalloon[i],addedTextAndBalloon[i].left,addedTextAndBalloon[i].top]);
+            }
+            for (let i = 0; i < 3; ++i) {
+              for(let j = 0, n = addedTextPos.length; j < n; ++j){
+                let target = addedTextPos[j][0];
+                let left = addedTextPos[j][1];
+                let top = addedTextPos[j][2];
+                target.left = left + Math.round(Math.random()*10) - 5;
+                target.top = top + Math.round(Math.random()*20) - 10;
+              }
+              canvas.renderAll();
+              encoder.addFrame(canvas.getContext());
+            }
+            encoder.finish();
+            const binaryGIF = encoder.stream().getData();
+            const rawUrl = 'data:image/gif;base64,'+encode64(binaryGIF);
+            const parse = rawUrl.slice(5).split(/[,;]/);
+            const binStr = atob(parse.pop());
+            const l = binStr.length;
+            const array = new Uint8Array(l);
+
+            for (let i = 0; i < l; i++) {
+              array[i] = binStr.charCodeAt(i);
+            }
+            const blob = new Blob([array], { type: parse[0] });
+            const blobUrl = URL.createObjectURL(blob);
+
+            const tmpLink = document.createElement('a');
+            tmpLink.href = blobUrl;
+            tmpLink.download = "output.gif";
+            tmpLink.click();
+            URL.revokeObjectURL(blobUrl);
+          }, false);
+      }
+    });
+  </script>
+</body>
