@@ -32,7 +32,7 @@
   / おまけ
   <button id="keikaku" type="button"><i class="material-icons">sentiment_satisfied</i>計画通り</button>
   <button id="copyRight" type="button"><i class="material-icons">copyright</i>copyright FFXIV</button>
-  <button id="gifAnimation" type="button"><i class="material-icons">save_alt</i>Gifアニメで保存</button>
+  <button id="gifAnimation" type="button"><i class="material-icons">movie</i>Gifアニメで保存(字と吹き出しが微妙に動きます)</button>
 
   </div>
   <div id="layers">
@@ -281,7 +281,7 @@
           (e) => {
             const encoder = new GIFEncoder();
             encoder.setRepeat(0); // 0 = loop
-            encoder.setDelay(100); //go to next frame every n milliseconds
+            encoder.setDelay(10); //go to next frame every n milliseconds
             encoder.start();
             const addedTextPos = [];
             for(let i = 0, n = addedTextAndBalloon.length; i < n; ++i){
