@@ -7,54 +7,68 @@
   <link rel="stylesheet" href="lib/bootstrap-4.4.1-dist/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style type="text/css">
-    body {
-      background-color: #f8f4e6;
-      color: #433d3c;
-    }
+  .material-icons{font-size:1em;}
   </style>
 </head>
 
 <body>
   <div class="container-fluid">
     <div class="row">
-      <div class="btn-toolbar" role="toolbar">
-        <div class="btn-group mr-2" role="group">
-          <button class="btn btn-dark btn-sm" type="button"><input type="file" id="file"></button>
-          <button class="btn btn-dark btn-sm" id="crop" type="button" data-toggle="tooltip" title="切り抜き"><i
-              class="material-icons">crop</i></button>
-
-          <button class="btn btn-dark btn-sm" id="balloon1" type="button" data-toggle="tooltip" title="吹き出し"><i class="
-            material-icons">chat_bubble</i></button>
-          <button class="btn btn-dark btn-sm" id="addText" type="button" data-toggle="tooltip" title="文字"><i
-              class="material-icons">text_fields</i></button>
-          <button class="btn btn-dark btn-sm" type="button" data-toggle="tooltip" title="文字サイズ"><input type="range"
-              min="10" max="500" step="1" id="textRange"></button>
-          <button class="btn btn-dark btn-sm" id="zDown" type="button" data-toggle="tooltip" title="選択中のオブジェクトを一番下へ"><i
-              class="material-icons">arrow_drop_down</i></button>
-          <button class="btn btn-dark btn-sm" id="zUp" type="button" data-toggle="tooltip" title="選択中のオブジェクトを一番上へ"><i
-              class="material-icons">arrow_drop_up</i></button>
-          <button class="btn btn-dark btn-sm" id="invert" type="button" data-toggle="tooltip" title="画像の反転"><i
-              class="material-icons">invert_colors</i></button>
-        </div>
-        <div class="btn-group mr-2" role="group">
-          <button class="btn btn-danger btn-sm" id="remove" type="button"><i
-              class="material-icons">delete</i>削除</button>
-          <button class="btn btn-success btn-sm" id="dl" type="button"><i class="material-icons">save_alt</i>保存</button>
-        </div>
-        <div class="btn-group" role="group">
-          <button class="btn btn-warning btn-sm" id="keikaku" type="button" data-toggle="tooltip" title="おまけ：計画通り"><i
-              class="material-icons">sentiment_satisfied</i></button>
-          <button class="btn btn-warning btn-sm" id="copyRight" type="button" data-toggle="tooltip"
-            title="おまけ：copyright FFXIV"><i class="material-icons">copyright</i></button>
-          <button class="btn btn-warning btn-sm" id="gifAnimation" type="button" data-toggle="tooltip"
-            title="おまけ：Gifアニメで保存(字と吹き出しが微妙に動きます)"><i class="material-icons">movie</i></button>
+      <div class="col-3">
+        <div class="list-group">
+          <div class="list-group-item">
+            <button class="btn btn-dark btn-sm" type="button">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="file">
+                <label class="custom-file-label" for="file">Choose file</label>
+              </div>
+            </button>
+          </div>
+          <div class="list-group-item">
+            <h6>ファイル出力</h6>
+            <button class="btn btn-success btn-sm" id="dl" type="button"><i
+                class="material-icons">save_alt</i>画像</button>
+            <button class="btn btn-warning btn-sm" id="gifAnimation" type="button"><i
+                class="material-icons">movie</i>Gifアニメ</button>
+          </div>
+          <div class="list-group-item">
+            <h6>オブジェクトの追加・削除</h6>
+            <button class="btn btn-dark btn-sm" id="balloon1" type="button"><i class="
+              material-icons">chat_bubble</i>吹き出し</button>
+            <button class="btn btn-dark btn-sm" id="addText" type="button"><i
+                class="material-icons">text_fields</i>文字</button>
+            <button class="btn btn-warning btn-sm" id="keikaku" type="button"><i
+                class="material-icons">sentiment_satisfied</i>計画通り</button>
+            <button class="btn btn-warning btn-sm" id="copyRight" type="button" FFXIV"><i
+                class="material-icons">copyright</i>copyright FFXIV</button>
+            <button class="btn btn-danger btn-sm" id="remove" type="button"><i
+                class="material-icons">delete</i>削除</button>
+          </div>
+          <div class="list-group-item">
+            <h6>画像の操作</h6>
+            <button class="btn btn-dark btn-sm" id="crop" type="button"><i class="material-icons">crop</i>切り抜き</button>
+            <button class="btn btn-dark btn-sm" id="invert" type="button"><i
+                class="material-icons">invert_colors</i>反転</button>
+          </div>
+          <div class="list-group-item">
+            <h6>文字の操作</h6>
+            <label class="control-label" for="textRange">文字サイズ</label>
+            <input type="range" class="custom-range" min="10" max="500" step="1" id="textRange">
+          </div>
+          <div class="list-group-item">
+            <h6>オブジェクトの操作</h6>
+            <h7>前面・背面への移動</h7>
+            <button class="btn btn-dark btn-sm" id="zDown" type="button">
+              <i class="material-icons">arrow_drop_down</i>最背面へ</button>
+            <button class="btn btn-dark btn-sm" id="zUp" type="button"><i
+                class="material-icons">arrow_drop_up</i>最前面へ</button>
+          </div>
         </div>
       </div>
+      <div class="col overflow-auto" id="canvasWrapper">
+        <canvas id="canvas1"></canvas>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <canvas id="canvas1"></canvas>
-  </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -91,6 +105,7 @@
         const zDown = document.querySelector('#zDown');
         const gifAnimation = document.querySelector('#gifAnimation');
         const invert = document.querySelector('#invert');
+        const canvasWrapper = document.querySelector('#canvasWrapper');
 
         const canvas = new fabric.Canvas('canvas1');
         const addedTextAndBalloon = [];
@@ -117,6 +132,7 @@
                 canvas.clear();
                 canvas.setWidth(img.width);
                 canvas.setHeight(img.height);
+                canvasWrapper.style.height = window.innerHeight + 'px';
                 img.selectable = false;
                 canvas.add(img);
                 image = img;
