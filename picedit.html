@@ -14,6 +14,11 @@
       width: 1em;
       height: 1em;
     }
+
+    .svg_icon {
+      width: 2em;
+      height: 2em;
+    }
   </style>
   <title>picedit(。-∀-)</title>
 </head>
@@ -45,8 +50,13 @@
         <div class="card mb-1">
           <h6 class="card-header p-1">オブジェクトの追加・削除</h6>
           <div class="card-body bg-dark p-1">
-            <button class="btn btn-dark btn-sm" id="balloon1" type="button"><i class="feather-icon"
-                data-feather="film"></i>吹き出し</button>
+            <button class="btn btn-dark btn-sm" id="balloon1" type="button"><img class="svg_icon"
+                src="svg/e0502_1.svg"></button>
+            <button class="btn btn-dark btn-sm" id="balloon2" type="button"><img class="svg_icon"
+                src="svg/e0198_1.svg"></button>
+            <button class="btn btn-dark btn-sm" id="balloon3" type="button"><img class="svg_icon"
+                src="svg/e0801_1.svg"></button>
+
             <button class="btn btn-dark btn-sm" id="addText" type="button"><i class="feather-icon"
                 data-feather="type"></i>文字</button>
             <button class="btn btn-warning btn-sm" id="keikaku" type="button"><i class="feather-icon"
@@ -63,6 +73,15 @@
                 data-feather="crop"></i>切り抜き</button>
             <button class="btn btn-dark btn-sm" id="invert" type="button"><i class="feather-icon"
                 data-feather="corner-right-up"></i>反転</button>
+            <button class="btn btn-dark btn-sm" id="sizeHalf" type="button"><i class="feather-icon"
+                data-feather="minimize-2"></i>サイズx1/2</button>
+            <button class="btn btn-dark btn-sm" id="size2_3" type="button"><i class="feather-icon"
+                data-feather="minimize-2"></i>サイズx2/3</button>
+            <button class="btn btn-dark btn-sm" id="size2" type="button"><i class="feather-icon"
+                data-feather="maximize-2"></i>サイズx2</button>
+            <button class="btn btn-dark btn-sm" id="size4_3" type="button"><i class="feather-icon"
+                data-feather="maximize-2"></i>サイズx4/3</button>
+
           </div>
         </div>
         <div class="card mb-1">
@@ -122,6 +141,8 @@
         const crop = document.querySelector('#crop');
         const keikaku = document.querySelector('#keikaku');
         const balloon1 = document.querySelector('#balloon1');
+        const balloon2 = document.querySelector('#balloon2');
+        const balloon3 = document.querySelector('#balloon3');
         const addText = document.querySelector('#addText');
         const copyRight = document.querySelector('#copyRight');
         const textRange = document.querySelector('#textRange');
@@ -131,6 +152,10 @@
         const gifAnimation = document.querySelector('#gifAnimation');
         const invert = document.querySelector('#invert');
         const canvasWrapper = document.querySelector('#canvasWrapper');
+        const sizeHalf = document.querySelector('#sizeHalf');
+        const size2_3 = document.querySelector('#size2_3');
+        const size2 = document.querySelector('#size2');
+        const size4_3 = document.querySelector('#size4_3');
 
         const canvas = new fabric.Canvas('canvas1');
         const addedTextAndBalloon = [];
@@ -165,6 +190,36 @@
               });
             });
           }, false);
+
+        sizeHalf.addEventListener('click',
+          function (e) {
+            changeImageSize(1 / 2);
+          }, false);
+
+        size2_3.addEventListener('click',
+          function (e) {
+            changeImageSize(2 / 3);
+          }, false);
+
+        size2.addEventListener('click',
+          function (e) {
+            changeImageSize(2);
+          }, false);
+
+        size4_3.addEventListener('click',
+          function (e) {
+            changeImageSize(4 / 3);
+          }, false);
+
+        function changeImageSize(ratio) {
+          if (image == null) return;
+          image.scaleX = image.scaleX * ratio;
+          image.scaleY = image.scaleY * ratio;
+          canvas.setWidth(image.width * image.scaleX);
+          canvas.setHeight(image.height * image.scaleY);
+          canvasWrapper.style.height = window.innerHeight + 'px';
+          canvas.renderAll();
+        }
 
         let cropBox;
         crop.addEventListener('click',
@@ -262,15 +317,30 @@
 
         balloon1.addEventListener('click',
           (e) => {
-            var path = fabric.loadSVGFromString(balloon1Svg, function (objects, options) {
-              var obj = fabric.util.groupSVGElements(objects, options);
-              obj.scaleX = canvas.width / obj.width / 2;
-              obj.scaleY = canvas.height / obj.height / 2;
-              canvas.setActiveObject(obj);
-              addedTextAndBalloon.push(obj);
-              canvas.add(obj).renderAll();
-            });
+            loadSVGFile('svg/e0502_1.svg');
           }, false);
+
+        balloon2.addEventListener('click',
+          (e) => {
+            loadSVGFile('svg/e0198_1.svg');
+          }, false);
+
+        balloon3.addEventListener('click',
+          (e) => {
+            loadSVGFile('svg/e0801_1.svg');
+          }, false);
+
+
+        function loadSVGFile(path) {
+          var path = fabric.loadSVGFromURL(path, function (objects, options) {
+            var obj = fabric.util.groupSVGElements(objects, options);
+            obj.scaleX = canvas.width / obj.width / 2;
+            obj.scaleY = canvas.height / obj.height / 2;
+            canvas.setActiveObject(obj);
+            addedTextAndBalloon.push(obj);
+            canvas.add(obj).renderAll();
+          });
+        }
 
         addText.addEventListener('click',
           (e) => {
