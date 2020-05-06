@@ -5,63 +5,86 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="lib/bootstrap-4.4.1-dist/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style type="text/css">
-  .material-icons{font-size:1em;}
+    .material-icons {
+      font-size: 1em;
+    }
+
+    .feather {
+      width: 1em;
+      height: 1em;
+    }
   </style>
+  <title>picedit(。-∀-)</title>
 </head>
 
 <body>
   <div class="container-fluid">
     <div class="row">
       <div class="col-3">
-        <div class="list-group">
-          <div class="list-group-item">
-            <button class="btn btn-dark btn-sm" type="button">
-              <div class="custom-file">
-                <input type="file" class="custom-file-input" id="file">
-                <label class="custom-file-label" for="file">Choose file</label>
-              </div>
-            </button>
+        <div class="card mb-1">
+          <div class="card-body p-2">picedit(。-∀-)</div>
+        </div>
+        <div class="card mb-1">
+          <button class="btn btn-dark btn-sm" type="button">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="file">
+              <label class="custom-file-label" for="file">Choose file</label>
+            </div>
+          </button>
+        </div>
+        <div class="card mb-1">
+          <h6 class="card-header p-1">ファイル出力</h6>
+          <div class="card-body bg-dark p-1">
+            <button class="btn btn-success btn-sm" id="dl" type="button"><i class="feather-icon"
+                data-feather="download"></i>画像</button>
+            <button class="btn btn-warning btn-sm" id="gifAnimation" type="button"><i class="feather-icon"
+                data-feather="film"></i>Gifアニメ</button>
           </div>
-          <div class="list-group-item">
-            <h6>ファイル出力</h6>
-            <button class="btn btn-success btn-sm" id="dl" type="button"><i
-                class="material-icons">save_alt</i>画像</button>
-            <button class="btn btn-warning btn-sm" id="gifAnimation" type="button"><i
-                class="material-icons">movie</i>Gifアニメ</button>
+        </div>
+        <div class="card mb-1">
+          <h6 class="card-header p-1">オブジェクトの追加・削除</h6>
+          <div class="card-body bg-dark p-1">
+            <button class="btn btn-dark btn-sm" id="balloon1" type="button"><i class="feather-icon"
+                data-feather="film"></i>吹き出し</button>
+            <button class="btn btn-dark btn-sm" id="addText" type="button"><i class="feather-icon"
+                data-feather="type"></i>文字</button>
+            <button class="btn btn-warning btn-sm" id="keikaku" type="button"><i class="feather-icon"
+                data-feather="smile"></i>計画通り</button>
+            <button class="btn btn-warning btn-sm" id="copyRight" type="button" FFXIV">©copyright FFXIV</button>
+            <button class="btn btn-danger btn-sm" id="remove" type="button"><i class="feather-icon"
+                data-feather="delete"></i>削除</button>
           </div>
-          <div class="list-group-item">
-            <h6>オブジェクトの追加・削除</h6>
-            <button class="btn btn-dark btn-sm" id="balloon1" type="button"><i class="
-              material-icons">chat_bubble</i>吹き出し</button>
-            <button class="btn btn-dark btn-sm" id="addText" type="button"><i
-                class="material-icons">text_fields</i>文字</button>
-            <button class="btn btn-warning btn-sm" id="keikaku" type="button"><i
-                class="material-icons">sentiment_satisfied</i>計画通り</button>
-            <button class="btn btn-warning btn-sm" id="copyRight" type="button" FFXIV"><i
-                class="material-icons">copyright</i>copyright FFXIV</button>
-            <button class="btn btn-danger btn-sm" id="remove" type="button"><i
-                class="material-icons">delete</i>削除</button>
+        </div>
+        <div class="card mb-1">
+          <h6 class="card-header p-1">画像の操作</h6>
+          <div class="card-body bg-dark p-1">
+            <button class="btn btn-dark btn-sm" id="crop" type="button"><i class="feather-icon"
+                data-feather="crop"></i>切り抜き</button>
+            <button class="btn btn-dark btn-sm" id="invert" type="button"><i class="feather-icon"
+                data-feather="corner-right-up"></i>反転</button>
           </div>
-          <div class="list-group-item">
-            <h6>画像の操作</h6>
-            <button class="btn btn-dark btn-sm" id="crop" type="button"><i class="material-icons">crop</i>切り抜き</button>
-            <button class="btn btn-dark btn-sm" id="invert" type="button"><i
-                class="material-icons">invert_colors</i>反転</button>
-          </div>
-          <div class="list-group-item">
-            <h6>文字の操作</h6>
+        </div>
+        <div class="card mb-1">
+          <h6 class="card-header p-1">文字の操作</h6>
+          <div class="card-body bg-dark p-1">
             <label class="control-label" for="textRange">文字サイズ</label>
             <input type="range" class="custom-range" min="10" max="500" step="1" id="textRange">
           </div>
-          <div class="list-group-item">
-            <h6>オブジェクトの操作</h6>
-            <h7>前面・背面への移動</h7>
+        </div>
+        <div class="card mb-1">
+          <h6 class="card-header p-1">オブジェクトの操作</h6>
+          <div class="card-body bg-dark p-1">
             <button class="btn btn-dark btn-sm" id="zDown" type="button">
-              <i class="material-icons">arrow_drop_down</i>最背面へ</button>
-            <button class="btn btn-dark btn-sm" id="zUp" type="button"><i
-                class="material-icons">arrow_drop_up</i>最前面へ</button>
+              <i class="feather-icon" data-feather="arrow-down"></i>最背面へ</button>
+            <button class="btn btn-dark btn-sm" id="zUp" type="button"><i class="feather-icon"
+                data-feather="arrow-up"></i>最前面へ</button>
+          </div>
+        </div>
+        <div class="card mb-1">
+          <div class="card-body bg-dark p-1">
+            <small>©2020 vinca</small><a class="btn" href="https://twitter.com/_vinca_rosea" role="button">
+              <i class="feather-icon" data-feather="twitter"></i></a>
           </div>
         </div>
       </div>
@@ -85,7 +108,9 @@
   <script src="lib/NeuQuant.js"></script>
   <script src="lib/GIFEncoder.js"></script>
   <script src="lib/b64.js"></script>
+  <script src="lib/feather.min.js"></script>
   <script>
+    feather.replace();
     WebFont.load({
       google: {
         families: ['Noto Serif JP', 'Roboto']
