@@ -56,6 +56,8 @@
                 src="svg/e0198_1.svg"></button>
             <button class="btn btn-dark btn-sm" id="balloon3" type="button"><img class="svg_icon"
                 src="svg/e0801_1.svg"></button>
+            <button class="btn btn-light btn-sm" id="clip1" type="button"><img class="svg_icon"
+                src="svg/reiwa-era-kanji.svg"></button>
 
             <button class="btn btn-dark btn-sm" id="addText" type="button"><i class="feather-icon"
                 data-feather="type"></i>文字</button>
@@ -143,6 +145,8 @@
         const balloon1 = document.querySelector('#balloon1');
         const balloon2 = document.querySelector('#balloon2');
         const balloon3 = document.querySelector('#balloon3');
+        const clip1 = document.querySelector('#clip1');
+
         const addText = document.querySelector('#addText');
         const copyRight = document.querySelector('#copyRight');
         const textRange = document.querySelector('#textRange');
@@ -330,6 +334,10 @@
             loadSVGFile('svg/e0801_1.svg');
           }, false);
 
+        clip1.addEventListener('click',
+          (e) => {
+            loadSVGFile('svg/reiwa-era-kanji.svg');
+          }, false);
 
         function loadSVGFile(path) {
           var path = fabric.loadSVGFromURL(path, function (objects, options) {
