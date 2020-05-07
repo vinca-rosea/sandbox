@@ -6,13 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="lib/bootstrap-4.4.1-dist/css/bootstrap.min.css">
   <style type="text/css">
-    .material-icons {
-      font-size: 1em;
-    }
-
     .feather {
       width: 1em;
       height: 1em;
+      margin-right: 2px;
     }
 
     .svg_icon {
@@ -39,7 +36,7 @@
           </button>
         </div>
         <div class="card mb-1">
-          <h6 class="card-header p-1">ファイル出力</h6>
+          <h6 class="card-header p-1"><i class="feather-icon" data-feather="file"></i>ファイル出力</h6>
           <div class="card-body bg-dark p-1">
             <button class="btn btn-success btn-sm" id="dl" type="button"><i class="feather-icon"
                 data-feather="download"></i>画像</button>
@@ -48,7 +45,7 @@
           </div>
         </div>
         <div class="card mb-1">
-          <h6 class="card-header p-1">オブジェクトの追加・削除</h6>
+          <h6 class="card-header p-1"><i class="feather-icon" data-feather="plus-circle"></i>オブジェクトの追加・削除</h6>
           <div class="card-body bg-dark p-1">
             <button class="btn btn-dark btn-sm" id="balloon1" type="button"><img class="svg_icon"
                 src="svg/e0502_1.svg"></button>
@@ -69,7 +66,7 @@
           </div>
         </div>
         <div class="card mb-1">
-          <h6 class="card-header p-1">画像の操作</h6>
+          <h6 class="card-header p-1"><i class="feather-icon" data-feather="image"></i>画像の操作</h6>
           <div class="card-body bg-dark p-1">
             <button class="btn btn-dark btn-sm" id="crop" type="button"><i class="feather-icon"
                 data-feather="crop"></i>切り抜き</button>
@@ -84,7 +81,7 @@
           </div>
         </div>
         <div class="card mb-1">
-          <h6 class="card-header p-1">画像フィルター</h6>
+          <h6 class="card-header p-1"><i class="feather-icon" data-feather="filter"></i>画像フィルター</h6>
           <div class="card-body bg-dark p-1">
             <button class="btn btn-dark btn-sm" type="button">
               <div class="custom-control custom-switch">
@@ -143,14 +140,16 @@
           </div>
         </div>
         <div class="card mb-1">
-          <h6 class="card-header p-1">文字の操作</h6>
+          <h6 class="card-header p-1"><i class="feather-icon"
+            data-feather="type"></i>文字の操作</h6>
           <div class="card-body bg-dark p-1">
             <label class="control-label" for="textRange">文字サイズ</label>
             <input type="range" class="custom-range" min="10" max="500" step="1" id="textRange">
           </div>
         </div>
         <div class="card mb-1">
-          <h6 class="card-header p-1">オブジェクトの操作</h6>
+          <h6 class="card-header p-1"><i class="feather-icon"
+            data-feather="box"></i>オブジェクトの操作</h6>
           <div class="card-body bg-dark p-1">
             <button class="btn btn-dark btn-sm" id="zDown" type="button">
               <i class="feather-icon" data-feather="arrow-down"></i>最背面へ</button>
