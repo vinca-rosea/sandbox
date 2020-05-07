@@ -73,8 +73,6 @@
           <div class="card-body bg-dark p-1">
             <button class="btn btn-dark btn-sm" id="crop" type="button"><i class="feather-icon"
                 data-feather="crop"></i>切り抜き</button>
-            <button class="btn btn-dark btn-sm" id="invert" type="button"><i class="feather-icon"
-                data-feather="corner-right-up"></i>反転</button>
             <button class="btn btn-dark btn-sm" id="sizeHalf" type="button"><i class="feather-icon"
                 data-feather="minimize-2"></i>サイズx1/2</button>
             <button class="btn btn-dark btn-sm" id="size2_3" type="button"><i class="feather-icon"
@@ -83,7 +81,65 @@
                 data-feather="maximize-2"></i>サイズx2</button>
             <button class="btn btn-dark btn-sm" id="size4_3" type="button"><i class="feather-icon"
                 data-feather="maximize-2"></i>サイズx4/3</button>
+          </div>
+        </div>
+        <div class="card mb-1">
+          <h6 class="card-header p-1">画像フィルター</h6>
+          <div class="card-body bg-dark p-1">
+            <button class="btn btn-dark btn-sm" type="button">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="invert">
+                <label class="custom-control-label" for="invert">invert</label>
+              </div>
+            </button>
+            <button class="btn btn-dark btn-sm" type="button">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="grayscale">
+                <label class="custom-control-label" for="grayscale">grayscale</label>
+              </div>
+            </button>
 
+            <button class="btn btn-dark btn-sm" type="button">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="brownie">
+                <label class="custom-control-label" for="brownie">brownie</label>
+              </div>
+            </button>
+
+            <button class="btn btn-dark btn-sm" type="button">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="vintage">
+                <label class="custom-control-label" for="vintage">vintage</label>
+              </div>
+            </button>
+
+            <button class="btn btn-dark btn-sm" type="button">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="technicolor">
+                <label class="custom-control-label" for="technicolor">technicolor</label>
+              </div>
+            </button>
+
+            <button class="btn btn-dark btn-sm" type="button">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="kodachrome">
+                <label class="custom-control-label" for="kodachrome">kodachrome</label>
+              </div>
+            </button>
+
+            <button class="btn btn-dark btn-sm" type="button">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="polaroid">
+                <label class="custom-control-label" for="polaroid">polaroid</label>
+              </div>
+            </button>
+
+            <button class="btn btn-dark btn-sm" type="button">
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="blackwhite">
+                <label class="custom-control-label" for="blackwhite">blackwhite</label>
+              </div>
+            </button>
           </div>
         </div>
         <div class="card mb-1">
@@ -155,6 +211,13 @@
         const zDown = document.querySelector('#zDown');
         const gifAnimation = document.querySelector('#gifAnimation');
         const invert = document.querySelector('#invert');
+        const grayscale = document.querySelector('#grayscale');
+        const brownie = document.querySelector('#brownie');
+        const vintage = document.querySelector('#vintage');
+        const technicolor = document.querySelector('#technicolor');
+        const kodachrome = document.querySelector('#kodachrome');
+        const polaroid = document.querySelector('#polaroid');
+        const blackwhite = document.querySelector('#blackwhite');
         const canvasWrapper = document.querySelector('#canvasWrapper');
         const sizeHalf = document.querySelector('#sizeHalf');
         const size2_3 = document.querySelector('#size2_3');
@@ -474,21 +537,61 @@
 
         invert.addEventListener('click',
           (e) => {
-            let found = false;
-            for (let i = 0, n = image.filters.length; i < n; ++i) {
-              if (image.filters[i].type == "Invert") {
-                found = true;
-                image.filters.splice(i, 1);
-                image.applyFilters();
-                break;
-              }
-            }
-            if (!found) {
-              image.filters.push(new fabric.Image.filters.Invert());
-              image.applyFilters();
-            }
-            canvas.renderAll();
+            e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Invert());
           }, false);
+
+        grayscale.addEventListener('click',
+          (e) => {
+            e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Grayscale());
+          }, false);
+
+        brownie.addEventListener('click',
+          (e) => {
+            e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Brownie());
+          }, false);
+
+        vintage.addEventListener('click',
+          (e) => {
+            e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Vintage());
+          }, false);
+
+        technicolor.addEventListener('click',
+          (e) => {
+            e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Technicolor());
+          }, false);
+
+        kodachrome.addEventListener('click',
+          (e) => {
+            e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Kodachrome());
+          }, false);
+
+        polaroid.addEventListener('click',
+          (e) => {
+            e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Polaroid());
+          }, false);
+
+        blackwhite.addEventListener('click',
+          (e) => {
+            e.currentTarget.checkd = applyFilter(new fabric.Image.filters.BlackWhite());
+          }, false);
+
+        function applyFilter(filter) {
+          let found = false;
+          for (let i = 0, n = image.filters.length; i < n; ++i) {
+            if (image.filters[i].type == filter.type) {
+              found = true;
+              image.filters.splice(i, 1);
+              image.applyFilters();
+              break;
+            }
+          }
+          if (!found) {
+            image.filters.push(filter);
+            image.applyFilters();
+          }
+          canvas.renderAll();
+          return !found;
+        }
       }
     });
   </script>
