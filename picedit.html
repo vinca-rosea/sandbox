@@ -18,8 +18,8 @@
     }
 
     .fill {
-      height: 100vh;
-      min-height: 100vh;
+      height: calc(100vh - 56px);
+      min-height: calc(100vh - 56px);
     }
 
     ::-webkit-scrollbar {
@@ -36,38 +36,52 @@
       border-radius: 10px;
     }
 
-    /* set button(top and bottom of the scrollbar) */
-    body::-webkit-scrollbar-button {
-      display: none
+    .popover .arrow::after{
+      border-right-color: #B58900;
+    }
+
+    .popover, .popover-body{
+      color:#073642;
+      background-color: #B58900;
     }
   </style>
   <title>picedit(。-∀-)</title>
 </head>
 
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">picedit(。-∀-)</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+      aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownFile" role="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true">
+            <span data-toggle="popover" data-content="画像を開いてください" data-placement="right"
+              id="navbarDropdownFileText">ファイル</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownFile">
+            <input type="file" class="d-none" id="file">
+            <a class="dropdown-item" id="menuLoad" href="#"><i class="feather-icon" data-feather="image"></i>画像を開く</a>
+            <a class="dropdown-item" id="dl" href="#"><i class="feather-icon" data-feather="download"></i>画像の保存</a>
+            <a class="dropdown-item" id="gifAnimation" href="#"><i class="feather-icon"
+                data-feather="film"></i>Gifアニメの保存</a>
+          </div>
+        </li>
+      </ul>
+      <div>
+        <small>©2020 vinca</small><a class="btn" href="https://twitter.com/_vinca_rosea" role="button">
+          <i class="feather-icon" data-feather="twitter"></i></a>
+      </div>
+    </div>
+  </nav>
   <div class="container-fluid fill">
     <div class="row fill">
       <div class="col-3 fill overflow-auto">
-        <div class="card mb-1">
-          <div class="card-body p-2">picedit(。-∀-)</div>
-        </div>
-        <div class="card mb-1">
-          <button class="btn btn-dark btn-sm" type="button">
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="file">
-              <label class="custom-file-label" for="file">Choose file</label>
-            </div>
-          </button>
-        </div>
-        <div class="card mb-1">
-          <h6 class="card-header p-1"><i class="feather-icon" data-feather="file"></i>ファイル出力</h6>
-          <div class="card-body bg-dark p-1">
-            <button class="btn btn-success btn-sm" id="dl" type="button"><i class="feather-icon"
-                data-feather="download"></i>画像</button>
-            <button class="btn btn-warning btn-sm" id="gifAnimation" type="button"><i class="feather-icon"
-                data-feather="film"></i>Gifアニメ</button>
-          </div>
-        </div>
         <div class="card mb-1">
           <h6 class="card-header p-1"><i class="feather-icon" data-feather="plus-circle"></i>オブジェクトの追加・削除</h6>
           <div class="card-body bg-dark p-1">
@@ -179,12 +193,6 @@
                 data-feather="arrow-up"></i>最前面へ</button>
           </div>
         </div>
-        <div class="card mb-1">
-          <div class="card-body bg-dark p-1">
-            <small>©2020 vinca</small><a class="btn" href="https://twitter.com/_vinca_rosea" role="button">
-              <i class="feather-icon" data-feather="twitter"></i></a>
-          </div>
-        </div>
       </div>
       <div class="col fill overflow-auto" id="canvasWrapper">
         <canvas id="canvas1"></canvas>
@@ -245,11 +253,12 @@
         const size2 = document.querySelector('#size2');
         const size4_3 = document.querySelector('#size4_3');
 
+        const menuLoad = document.querySelector('#menuLoad');
         const canvas = new fabric.Canvas('canvas1');
         const addedTextAndBalloon = [];
 
         let image;
-
+        $('#navbarDropdownFileText').popover('show');
         fabric.Object.prototype.set({
           transparentCorners: false,
           borderColor: '#ff00ff',
@@ -275,6 +284,7 @@
                 image = img;
                 canvas.renderAll();
               });
+              $('#navbarDropdownFileText').popover('hide');
             });
           }, false);
 
@@ -611,6 +621,12 @@
           canvas.renderAll();
           return !found;
         }
+
+        menuLoad.addEventListener('click',
+          (e) => {
+            file.click();
+          }, false);
+
       }
     });
   </script>
