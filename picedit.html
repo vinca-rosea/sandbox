@@ -18,8 +18,27 @@
     }
 
     .fill {
-      height:100vh;
-      min-height:100vh;
+      height: 100vh;
+      min-height: 100vh;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #073642;
+      border: none;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #75888a;
+      border-radius: 10px;
+    }
+
+    /* set button(top and bottom of the scrollbar) */
+    body::-webkit-scrollbar-button {
+      display: none
     }
   </style>
   <title>picedit(。-∀-)</title>
@@ -145,16 +164,14 @@
           </div>
         </div>
         <div class="card mb-1">
-          <h6 class="card-header p-1"><i class="feather-icon"
-            data-feather="type"></i>文字の操作</h6>
+          <h6 class="card-header p-1"><i class="feather-icon" data-feather="type"></i>文字の操作</h6>
           <div class="card-body bg-dark p-1">
             <label class="control-label" for="textRange">文字サイズ</label>
             <input type="range" class="custom-range" min="10" max="500" step="1" id="textRange">
           </div>
         </div>
         <div class="card mb-1">
-          <h6 class="card-header p-1"><i class="feather-icon"
-            data-feather="box"></i>オブジェクトの操作</h6>
+          <h6 class="card-header p-1"><i class="feather-icon" data-feather="box"></i>オブジェクトの操作</h6>
           <div class="card-body bg-dark p-1">
             <button class="btn btn-dark btn-sm" id="zDown" type="button">
               <i class="feather-icon" data-feather="arrow-down"></i>最背面へ</button>
