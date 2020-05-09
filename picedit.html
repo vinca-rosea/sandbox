@@ -286,6 +286,7 @@
                 canvas.setWidth(img.width);
                 canvas.setHeight(img.height);
                 img.selectable = false;
+                fabric.textureSize = Math.max(img.width,img.height);
                 canvas.add(img);
                 image = img;
                 canvas.renderAll();
@@ -414,8 +415,6 @@
             canvas.add(smallTextBox);
             canvas.renderAll();
           }, false);
-
-        const balloon1Svg = '<svg version="1.1" id="_x34_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 800 558.2" style="enable-background:new 0 0 800 558.2;" xml:space="preserve"><style type="text/css">.stblack{fill:#000000;}.st0{fill:#FFFFFF;}</style><g><path class="stblack" d="M344.5,14C327.7,93.5,152.9,153.5,20,108.4c100.4,70.8,103.8,230.2,0,283.5c112.4-15.6,235.7,77,223.8,152.4c79.4-60.3,275.9-73.7,343.2-4.5c-27.8-79.5,85.3-175.5,193.1-168.4c-101-46.5-99.2-192.1-20.5-254.7c-109.5,35.2-186.7,9.4-143.8-53.4C545.4,109,375.7,83.3,344.5,14z"></path><path class="st0" d="M257.2,519c-3.5-20.1-14-40.9-30.7-60.6c-38.1-44.7-101.5-76-162.4-81.5c26.8-26.7,43-63.4,46-105.5c3.5-50.1-12.3-99.2-42.6-137.3c16.6,2.5,33.9,3.7,51.6,3.7c0,0,0,0,0,0c101.9,0,196-40.7,228.6-94.9c35.5,37.6,107.6,57.2,170.2,57.2c26.7,0,51.2-3.4,72-10c-1.1,10.5,1.4,18.9,4.6,25c10.7,20.2,37.6,31.3,75.7,31.3c14.7,0,30.8-1.6,47.7-4.8c-22.9,34.6-33.7,78.7-28.5,122c4.7,38.7,21.5,72,47.6,95.8c-56.7,9.3-113,42.2-144.3,86.3c-14.6,20.5-22.6,42-23.9,62.8c-33.4-19-80.6-29.5-135.2-29.5C368,479.2,302,494.4,257.2,519z"></path></g></svg>';
 
         balloon1.addEventListener('click',
           (e) => {
