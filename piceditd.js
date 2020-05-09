@@ -171,7 +171,7 @@ WebFont.load({
         setTimeout(function () {
           document.body.removeChild(tmpLink);
           URL.revokeObjectURL(blobUrl);
-        }, 60000);
+        }, 500);
         alert('download click event 7');
         }catch(e){
           alert(e);
