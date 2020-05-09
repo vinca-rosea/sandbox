@@ -158,9 +158,13 @@ WebFont.load({
         const blobUrl = URL.createObjectURL(blob);
 
         alert('download click event 4');
+        
         const tmpLink = document.createElement('a');
+        alert(tmpLink);
+        alert(blobUrl);
         tmpLink.href = blobUrl;
         tmpLink.download = "output.png";
+        alert(tmpLink);
         alert('download click event 5');
         tmpLink.click();
         alert('download click event 6');
