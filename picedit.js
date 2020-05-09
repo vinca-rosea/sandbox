@@ -34,6 +34,7 @@ WebFont.load({
     const size2 = document.querySelector('#size2');
     const size4_3 = document.querySelector('#size4_3');
     const menuLoad = document.querySelector('#menuLoad');
+    const menuDl = document.querySelector('#menuDl');
     const opacity = document.querySelector('#opacity');
     const canvas = new fabric.Canvas('canvas1');
     const addedTextAndBalloon = [];
@@ -426,7 +427,14 @@ WebFont.load({
         }).modal('show');
       }, false);
 
-    function createObjectPostProcess(object){
+    menuDl.addEventListener('click',
+      (e) => {
+        $('#dlDialog').modal({
+          keyboard: false
+        }).modal('show');
+      }, false);
+
+    function createObjectPostProcess(object) {
       object.on('selected', function () {
         opacity.value = object.opacity;
       });
