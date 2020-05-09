@@ -144,26 +144,31 @@ WebFont.load({
           format: 'png',
           quality: 1
         });
-
+        alert('download click event 1');
         const parse = rawUrl.slice(5).split(/[,;]/);
         const binStr = atob(parse.pop());
         const l = binStr.length;
         const array = new Uint8Array(l);
-
+        alert('download click event 2');
         for (let i = 0; i < l; i++) {
           array[i] = binStr.charCodeAt(i);
         }
+        alert('download click event 3');
         const blob = new Blob([array], { type: parse[0] });
         const blobUrl = URL.createObjectURL(blob);
 
+        alert('download click event 4');
         const tmpLink = document.createElement('a');
         tmpLink.href = blobUrl;
         tmpLink.download = "output.png";
+        alert('download click event 5');
         tmpLink.click();
+        alert('download click event 6');
         setTimeout(function () {
           document.body.removeChild(tmpLink);
           URL.revokeObjectURL(blobUrl);
         }, 60000);
+        alert('download click event 7');
         }catch(e){
           alert(e);
         }
