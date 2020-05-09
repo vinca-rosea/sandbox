@@ -1,0 +1,50 @@
+@font-face {
+    font-family: 'JapanSans70';
+    src: url('font/JapanSans70.woff') format('woff');
+}
+
+html,
+body {
+    font-family: 'JapanSans70';
+    font-size: 16px;
+}
+
+.feather {
+    width: 1em;
+    height: 1em;
+    margin-right: 2px;
+}
+
+.svg_icon {
+    width: 2em;
+    height: 2em;
+}
+
+.fill {
+    height: calc(100vh - 56px);
+    min-height: calc(100vh - 56px);
+}
+
+ ::-webkit-scrollbar {
+    width: 10px;
+}
+
+ ::-webkit-scrollbar-track {
+    background: #073642;
+    border: none;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background: #75888a;
+    border-radius: 10px;
+}
+
+.popover .arrow::after {
+    border-right-color: #B58900;
+}
+
+.popover,
+.popover-body {
+    color: #073642;
+    background-color: #B58900;
+}
