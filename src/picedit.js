@@ -1,10 +1,11 @@
+import 'es6-promise/auto';
 feather.replace();
+const defaultFont = 'Noto Serif JP';
 WebFont.load({
   google: {
-    families: ['Noto Serif JP', 'Roboto']
+    families: [defaultFont]
   },
   active: function () {
-
     const file = document.querySelector('input[type=file]');
     const download = document.querySelector('#dl');
     const crop = document.querySelector('#crop');
@@ -34,13 +35,24 @@ WebFont.load({
     const size2 = document.querySelector('#size2');
     const size4_3 = document.querySelector('#size4_3');
     const menuLoad = document.querySelector('#menuLoad');
+    const menuDl = document.querySelector('#menuDl');
     const opacity = document.querySelector('#opacity');
+    const matrixTransform = document.querySelector('#matrixTransform');
+    const font = document.querySelector('#font');
     const canvas = new fabric.Canvas('canvas1');
+    const fontList = [defaultFont, 'Roboto', 'Sawarabi Mincho'];
+    const loadfontList = [defaultFont];
     const addedTextAndBalloon = [];
-
     let image;
 
     var userAgent = window.navigator.userAgent.toLowerCase();
+
+    for (let i = 0, n = fontList.length; i < n; ++i) {
+      var defaultFontOption = document.createElement("option");
+      defaultFontOption.text = fontList[i];
+      defaultFontOption.value = fontList[i];
+      font.add(defaultFontOption);
+    }
 
     $('#fileDialog').modal({
       keyboard: false
@@ -111,7 +123,7 @@ WebFont.load({
         if (cropBox == null) {
           cropBox = new fabric.Textbox('この矩形のサイズを調整した後\nもう一度切り抜きボタンを押すと\n矩形にあわせて切り抜きます',
             {
-              backgroundColor: 'blue', left: 10, top: 10, fontFamily: 'Noto Serif JP', fill: '#fff', opacity: 0.5,
+              backgroundColor: 'blue', left: 10, top: 10, fontFamily: defaultFont, fill: '#fff', opacity: 0.5,
             });
 
           canvas.add(cropBox);
@@ -138,44 +150,34 @@ WebFont.load({
 
     download.addEventListener('click',
       (e) => {
-        alert('download click event');
-        try{
         const rawUrl = canvas.toDataURL({
           format: 'png',
           quality: 1
         });
-        alert('download click event 1');
+
         const parse = rawUrl.slice(5).split(/[,;]/);
         const binStr = atob(parse.pop());
         const l = binStr.length;
         const array = new Uint8Array(l);
-        alert('download click event 2');
+
         for (let i = 0; i < l; i++) {
           array[i] = binStr.charCodeAt(i);
         }
-        alert('download click event 3');
         const blob = new Blob([array], { type: parse[0] });
-        const blobUrl = URL.createObjectURL(blob);
+        if (window.navigator.msSaveBlob) {
+          window.navigator.msSaveBlob(blob, "output.png");
+          return;
+        }
 
-        alert('download click event 4');
-        
+        const blobUrl = URL.createObjectURL(blob);
         const tmpLink = document.createElement('a');
-        alert(tmpLink);
-        alert(blobUrl);
         tmpLink.href = blobUrl;
         tmpLink.download = "output.png";
-        alert(tmpLink);
-        alert('download click event 5');
         tmpLink.click();
-        alert('download click event 6');
         setTimeout(function () {
           document.body.removeChild(tmpLink);
           URL.revokeObjectURL(blobUrl);
-        }, 500);
-        alert('download click event 7');
-        }catch(e){
-          alert(e);
-        }
+        }, 60000);
       }, false);
 
     keikaku.addEventListener('click',
@@ -190,7 +192,7 @@ WebFont.load({
           fill: '#000000',
           shadow: '#ffffff 0px 0px 20px',
           fontWeight: 'bold',
-          fontFamily: 'Noto Serif JP',
+          fontFamily: defaultFont,
           lineHeight: 1
         });
 
@@ -201,7 +203,7 @@ WebFont.load({
           fill: '#000000',
           shadow: '#ffffff 0px 0px 10px',
           fontWeight: 'bold',
-          fontFamily: 'Noto Serif JP',
+          fontFamily: defaultFont,
           lineHeight: 1
         });
         createObjectPostProcess(textBox);
@@ -254,7 +256,7 @@ WebFont.load({
           fill: '#000000',
           shadow: '#ffffff 0px 0px 3px',
           fontWeight: 'bold',
-          fontFamily: 'Noto Serif JP',
+          fontFamily: defaultFont,
           lineHeight: 1
         });
         textBox.on('selected', function () {
@@ -278,7 +280,7 @@ WebFont.load({
           fill: '#ffffff',
           strokeWidth: 1,
           stroke: "#000000",
-          fontFamily: 'Noto Roboto',
+          fontFamily: defaultFont,
           lineHeight: 1,
           fontWeight: 'bold',
           breakWords: false
@@ -301,6 +303,58 @@ WebFont.load({
         }
         canvas.renderAll();
       }, false);
+
+    font.addEventListener('change', (e) => {
+      const object = canvas.getActiveObject();
+      if (object.type == "textbox") {
+        const fontFamily = e.currentTarget.value;
+        if (loadfontList.indexOf(e.currentTarget.value) != -1) {
+          object.fontFamily = fontFamily;
+          canvas.renderAll();
+
+        } else {
+          WebFont.load({
+            google: {
+              families: [fontFamily]
+            },
+            active: function () {
+              loadfontList.push(fontFamily);
+              object.fontFamily = fontFamily;
+              canvas.renderAll();
+            }
+          });
+        }
+      }
+    });
+
+    matrixTransform.addEventListener('click',
+      (e) => {
+        const object = canvas.getActiveObject();
+        if (object.type == "textbox") {
+          object.text = transformMatrix(object.text);
+          canvas.renderAll();
+        }
+      }, false);
+
+    function transformMatrix(src) {
+      const t = src.split('\n');
+      let mlen = 0;
+      for (let i = 0, n = t.length; i < n; ++i) {
+        if (mlen < t[i].length) mlen = t[i].length;
+      }
+      let result = "";
+      for (let i = 0; i < mlen; ++i) {
+        let line = "";
+        for (let j = t.length - 1; j >= 0; --j) {
+          line += t[j].length <= i ? " " : t[j].charAt(i);
+        }
+        if (i != mlen - 1) {
+          line += '\n';
+        }
+        result += line;
+      }
+      return result;
+    }
 
     opacity.addEventListener('input',
       (e) => {
@@ -440,10 +494,21 @@ WebFont.load({
         }).modal('show');
       }, false);
 
-    function createObjectPostProcess(object){
+    menuDl.addEventListener('click',
+      (e) => {
+        $('#dlDialog').modal({
+          keyboard: false
+        }).modal('show');
+      }, false);
+
+    function createObjectPostProcess(object) {
       object.on('selected', function () {
         opacity.value = object.opacity;
+        if(object.type == 'textbox'){
+          font.value = object.fontFamily;
+        }
       });
     }
   }
 });
+
