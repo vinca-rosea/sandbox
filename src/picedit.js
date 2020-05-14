@@ -417,6 +417,11 @@ WebFont.load({
           array[i] = binStr.charCodeAt(i);
         }
         const blob = new Blob([array], { type: parse[0] });
+        if (window.navigator.msSaveBlob) {
+          window.navigator.msSaveBlob(blob, "output.gif");
+          return;
+        }
+
         const blobUrl = URL.createObjectURL(blob);
 
         const tmpLink = document.createElement('a');
