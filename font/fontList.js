@@ -47,4 +47,9 @@ export default {
     'Hanalei': 'google',
     //
     'hakidame': 'custom',
+    'Kaiso-Next-B': 'custom',
+    'Pigmo-00': 'custom',
+    'onryou': 'custom',
+    'にくまるフォント': 'custom',
+    'はなぞめフォント': 'custom',
 }
