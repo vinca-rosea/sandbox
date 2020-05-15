@@ -1,9 +1,11 @@
 import 'es6-promise/auto';
+import loadFontList from '../font/fontList.js';
+var _ = require('lodash');
 feather.replace();
-const defaultFont = 'Noto Serif JP';
+const defaultFont = { name: 'Noto Serif JP', type: 'google' };
 WebFont.load({
   google: {
-    families: [defaultFont]
+    families: [defaultFont.name]
   },
   active: function () {
     const file = document.querySelector('input[type=file]');
@@ -40,19 +42,34 @@ WebFont.load({
     const matrixTransform = document.querySelector('#matrixTransform');
     const font = document.querySelector('#font');
     const canvas = new fabric.Canvas('canvas1');
-    const fontList = [defaultFont, 'Roboto', 'Sawarabi Mincho'];
-    const loadfontList = [defaultFont];
+    const defaultFontName = defaultFont.name;
+    let fontList = {};
+    fontList[defaultFontName] = defaultFont.type;
+    fontList = { ...fontList, ...loadFontList };
+    const loadfontList = [defaultFont.name];
     const addedTextAndBalloon = [];
     let image;
 
-    var userAgent = window.navigator.userAgent.toLowerCase();
+    const sortedKeys =
+      _.unzip(
+        _.orderBy(
+          _.zip(
+            _.keys(fontList),
+            _.keys(fontList).map((f) => f.toLowerCase())), 1))[0];
 
-    for (let i = 0, n = fontList.length; i < n; ++i) {
-      var defaultFontOption = document.createElement("option");
-      defaultFontOption.text = fontList[i];
-      defaultFontOption.value = fontList[i];
+    sortedKeys.forEach((key) => {
+      const defaultFontOption = document.createElement("option");
+      defaultFontOption.text = key;
+      defaultFontOption.value = key;
       font.add(defaultFontOption);
-    }
+    });
+
+    // for (let key in sortedKeys) {
+    //   const defaultFontOption = document.createElement("option");
+    //   defaultFontOption.text = key;
+    //   defaultFontOption.value = key;
+    //   font.add(defaultFontOption);
+    // }
 
     $('#fileDialog').modal({
       keyboard: false
@@ -123,7 +140,7 @@ WebFont.load({
         if (cropBox == null) {
           cropBox = new fabric.Textbox('この矩形のサイズを調整した後\nもう一度切り抜きボタンを押すと\n矩形にあわせて切り抜きます',
             {
-              backgroundColor: 'blue', left: 10, top: 10, fontFamily: defaultFont, fill: '#fff', opacity: 0.5,
+              backgroundColor: 'blue', left: 10, top: 10, fontFamily: defaultFontName, fill: '#fff', opacity: 0.5,
             });
 
           canvas.add(cropBox);
@@ -192,7 +209,7 @@ WebFont.load({
           fill: '#000000',
           shadow: '#ffffff 0px 0px 20px',
           fontWeight: 'bold',
-          fontFamily: defaultFont,
+          fontFamily: defaultFontName,
           lineHeight: 1
         });
 
@@ -203,7 +220,7 @@ WebFont.load({
           fill: '#000000',
           shadow: '#ffffff 0px 0px 10px',
           fontWeight: 'bold',
-          fontFamily: defaultFont,
+          fontFamily: defaultFontName,
           lineHeight: 1
         });
         createObjectPostProcess(textBox);
@@ -256,7 +273,7 @@ WebFont.load({
           fill: '#000000',
           shadow: '#ffffff 0px 0px 3px',
           fontWeight: 'bold',
-          fontFamily: defaultFont,
+          fontFamily: defaultFontName,
           lineHeight: 1
         });
         textBox.on('selected', function () {
@@ -280,7 +297,7 @@ WebFont.load({
           fill: '#ffffff',
           strokeWidth: 1,
           stroke: "#000000",
-          fontFamily: defaultFont,
+          fontFamily: defaultFontName,
           lineHeight: 1,
           fontWeight: 'bold',
           breakWords: false
@@ -308,21 +325,37 @@ WebFont.load({
       const object = canvas.getActiveObject();
       if (object.type == "textbox") {
         const fontFamily = e.currentTarget.value;
-        if (loadfontList.indexOf(e.currentTarget.value) != -1) {
+        if (loadfontList.indexOf(fontFamily) != -1) {
           object.fontFamily = fontFamily;
           canvas.renderAll();
 
         } else {
-          WebFont.load({
-            google: {
-              families: [fontFamily]
-            },
-            active: function () {
-              loadfontList.push(fontFamily);
-              object.fontFamily = fontFamily;
-              canvas.renderAll();
-            }
-          });
+          if (fontList[fontFamily] == "google") {
+            WebFont.load({
+              google: {
+                families: [fontFamily]
+              },
+              active: function () {
+                loadfontList.push(fontFamily);
+                object.fontFamily = fontFamily;
+                font.options[font.selectedIndex].style.fontFamily = fontFamily;
+                canvas.renderAll();
+              }
+            });
+          } else if (fontList[fontFamily] == "custom") {
+            WebFont.load({
+              custom: {
+                families: [fontFamily],
+                urls: ['font/' + fontFamily + '.css']
+              },
+              active: function () {
+                loadfontList.push(fontFamily);
+                object.fontFamily = fontFamily;
+                font.options[font.selectedIndex].style.fontFamily = fontFamily;
+                canvas.renderAll();
+              }
+            });
+          }
         }
       }
     });
@@ -509,7 +542,7 @@ WebFont.load({
     function createObjectPostProcess(object) {
       object.on('selected', function () {
         opacity.value = object.opacity;
-        if(object.type == 'textbox'){
+        if (object.type == 'textbox') {
           font.value = object.fontFamily;
         }
       });
