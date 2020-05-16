@@ -163,8 +163,21 @@
         <div class="card mb-1">
           <h6 class="card-header p-1"><i class="feather-icon" data-feather="type"></i>文字の操作</h6>
           <div class="card-body bg-dark p-1">
-            <label class="control-label" for="textRange">文字サイズ</label>
-            <input type="range" class="custom-range" min="10" max="500" step="1" id="textRange">
+            <div class="d-flex w-100">
+              <button class="btn btn-dark btn-sm" id="fontBold" type="button"><i class="feather-icon"
+                  data-feather="bold"></i></button>
+              <button class="btn btn-dark btn-sm" id="fontItalic" type="button"><i class="feather-icon"
+                  data-feather="italic"></i></button>
+              <button class="btn btn-dark btn-sm" id="fontUnderline" type="button"><i class="feather-icon"
+                  data-feather="underline"></i></button>
+              <button class="btn btn-dark btn-sm">
+                <input type="color" id="fontColor" value="#000000">
+              </button>
+            </div>
+            <div class="d-flex w-100">
+              <label class="control-label w-25" for="textRange">文字サイズ</label>
+              <input type="range" class="custom-range w-75" min="10" max="500" step="1" id="textRange">
+            </div>
           </div>
           <select class="custom-select" id="font">
           </select>

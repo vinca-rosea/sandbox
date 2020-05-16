@@ -42,6 +42,10 @@ WebFont.load({
     const opacity = document.querySelector('#opacity');
     const matrixTransform = document.querySelector('#matrixTransform');
     const font = document.querySelector('#font');
+    const fontBold = document.querySelector('#fontBold');
+    const fontItalic = document.querySelector('#fontItalic');
+    const fontUnderline = document.querySelector('#fontUnderline');
+    const fontColor = document.querySelector('#fontColor');
     const undo = document.querySelector('#undo');
     const redo = document.querySelector('#redo');
     const canvas = new fabric.Canvas('canvas1');
@@ -65,14 +69,21 @@ WebFont.load({
       defaultFontOption.text = key;
       defaultFontOption.value = key;
       font.add(defaultFontOption);
-    });
 
-    // for (let key in sortedKeys) {
-    //   const defaultFontOption = document.createElement("option");
-    //   defaultFontOption.text = key;
-    //   defaultFontOption.value = key;
-    //   font.add(defaultFontOption);
-    // }
+      if (fontList[key] == "google") {
+        WebFont.load({
+          google: {
+            families: [key]
+          },
+          active: function () {
+            loadfontList.push(key);
+            _.each(_.filter(font.options, (option) => option.value == key), (option) => {
+              option.style.fontFamily = key;
+            });
+          }
+        });
+      }
+    });
 
     $('#fileDialog').modal({
       keyboard: false
@@ -276,7 +287,6 @@ WebFont.load({
           fontSize: textSize,
           fill: '#000000',
           shadow: '#ffffff 0px 0px 3px',
-          fontWeight: 'bold',
           fontFamily: defaultFontName,
           lineHeight: 1
         });
@@ -318,6 +328,7 @@ WebFont.load({
     textRange.addEventListener('input',
       (e) => {
         const object = canvas.getActiveObject();
+        if (object == null) return;
         if (object.type == "textbox") {
           object.fontSize = e.currentTarget.value;
           canvas.setActiveObject(object);
@@ -327,6 +338,7 @@ WebFont.load({
 
     font.addEventListener('change', (e) => {
       const object = canvas.getActiveObject();
+      if (object == null) return;
       if (object.type == "textbox") {
         const fontFamily = e.currentTarget.value;
         if (loadfontList.indexOf(fontFamily) != -1) {
@@ -364,9 +376,62 @@ WebFont.load({
       }
     });
 
+    fontBold.addEventListener('click',
+      (e) => {
+        const object = canvas.getActiveObject();
+        if (object == null) return;
+        if (object.type == "textbox") {
+          if (object.fontWeight == 'normal') {
+            object.fontWeight = 'bold';
+          } else {
+            object.fontWeight = 'normal';
+          }
+          canvas.renderAll();
+        }
+      }, false);
+
+    fontItalic.addEventListener('click',
+      (e) => {
+        const object = canvas.getActiveObject();
+        if (object == null) return;
+        if (object.type == "textbox") {
+          if (object.fontStyle == 'normal') {
+            object.fontStyle = 'italic';
+          } else {
+            object.fontStyle = 'normal';
+          }
+          canvas.renderAll();
+        }
+      }, false);
+
+    fontUnderline.addEventListener('click',
+      (e) => {
+        const object = canvas.getActiveObject();
+        if (object == null) return;
+        if (object.type == "textbox") {
+          if (object.get('underline')) {
+            object.set('underline',false);
+          } else {
+            object.set('underline',true);
+          }
+          canvas.renderAll();
+        }
+      }, false);
+
+      fontColor.addEventListener('input',
+      (e) => {
+        const object = canvas.getActiveObject();
+        if (object == null) return;
+        if (object.type == "textbox") {
+          object.set('fill',e.currentTarget.value);
+          canvas.renderAll();
+        }
+      }, false);
+
     matrixTransform.addEventListener('click',
       (e) => {
         const object = canvas.getActiveObject();
+        if (object == null) return;
         if (object.type == "textbox") {
           object.text = transformMatrix(object.text);
           canvas.renderAll();
@@ -396,6 +461,7 @@ WebFont.load({
     opacity.addEventListener('input',
       (e) => {
         const object = canvas.getActiveObject();
+        if (object == null) return;
         object.opacity = e.currentTarget.value;
         canvas.renderAll();
       }, false);
@@ -403,6 +469,7 @@ WebFont.load({
     zUp.addEventListener('click',
       (e) => {
         const object = canvas.getActiveObject();
+        if (object == null) return;
         object.moveTo(canvas._objects.length - 1);
         canvas.renderAll();
       }, false);
@@ -410,6 +477,7 @@ WebFont.load({
     zDown.addEventListener('click',
       (e) => {
         const object = canvas.getActiveObject();
+        if (object == null) return;
         object.moveTo(1);
         canvas.renderAll();
       }, false);
@@ -417,6 +485,7 @@ WebFont.load({
     remove.addEventListener('click',
       (e) => {
         const object = canvas.getActiveObject();
+        if (object == null) return;
         canvas.remove(object);
         canvas.renderAll();
       }, false);
@@ -544,20 +613,21 @@ WebFont.load({
       }, false);
 
     undo.addEventListener('click',
-    (e) => {
-      canvas.undo();
-    }, false);
+      (e) => {
+        canvas.undo();
+      }, false);
 
     redo.addEventListener('click',
-    (e) => {
-      canvas.redo();
-    }, false);
+      (e) => {
+        canvas.redo();
+      }, false);
 
     function createObjectPostProcess(object) {
       object.on('selected', function () {
         opacity.value = object.opacity;
         if (object.type == 'textbox') {
           font.value = object.fontFamily;
+          fontColor.value = object.get('fill');
         }
       });
     }

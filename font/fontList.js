@@ -29,7 +29,6 @@ export default {
     'Creepster': 'google',
     'Abril Fatface': 'google',
     'Fredoka One': 'google',
-    'Designed by Astigmatic': 'google',
     'Bangers': 'google',
     'Sigmar One': 'google',
     'Monoton': 'google',
