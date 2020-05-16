@@ -39,6 +39,7 @@
     ]
   },
   "dependencies": {
+    "fabric-history": "^1.6.0",
     "lodash": "^4.17.15"
   }
 }

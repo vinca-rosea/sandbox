@@ -1,4 +1,5 @@
 import 'es6-promise/auto';
+import 'fabric-history';
 import loadFontList from '../font/fontList.js';
 var _ = require('lodash');
 feather.replace();
@@ -41,6 +42,8 @@ WebFont.load({
     const opacity = document.querySelector('#opacity');
     const matrixTransform = document.querySelector('#matrixTransform');
     const font = document.querySelector('#font');
+    const undo = document.querySelector('#undo');
+    const redo = document.querySelector('#redo');
     const canvas = new fabric.Canvas('canvas1');
     const defaultFontName = defaultFont.name;
     let fontList = {};
@@ -99,6 +102,7 @@ WebFont.load({
             fabric.textureSize = Math.max(img.width, img.height);
             canvas.add(img);
             image = img;
+            canvas.clearHistory();
             canvas.renderAll();
           });
           $('#fileDialog').modal('hide');
@@ -538,6 +542,16 @@ WebFont.load({
           keyboard: false
         }).modal('show');
       }, false);
+
+    undo.addEventListener('click',
+    (e) => {
+      canvas.undo();
+    }, false);
+
+    redo.addEventListener('click',
+    (e) => {
+      canvas.redo();
+    }, false);
 
     function createObjectPostProcess(object) {
       object.on('selected', function () {
