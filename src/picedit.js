@@ -34,9 +34,8 @@ WebFont.load({
     const blackwhite = document.querySelector('#blackwhite');
     const canvasWrapper = document.querySelector('#canvasWrapper');
     const sizeHalf = document.querySelector('#sizeHalf');
-    const size2_3 = document.querySelector('#size2_3');
     const size2 = document.querySelector('#size2');
-    const size4_3 = document.querySelector('#size4_3');
+    const sizeReset = document.querySelector('#sizeReset');
     const menuLoad = document.querySelector('#menuLoad');
     const menuDl = document.querySelector('#menuDl');
     const opacity = document.querySelector('#opacity');
@@ -48,6 +47,9 @@ WebFont.load({
     const fontColor = document.querySelector('#fontColor');
     const undo = document.querySelector('#undo');
     const redo = document.querySelector('#redo');
+    const zoom = document.querySelector('#zoom');
+    const zoomValue = document.querySelector('#zoomValue');
+
     const canvas = new fabric.Canvas('canvas1');
     const defaultFontName = defaultFont.name;
     let fontList = {};
@@ -122,22 +124,20 @@ WebFont.load({
 
     sizeHalf.addEventListener('click',
       function (e) {
-        changeImageSize(1 / 2);
-      }, false);
-
-    size2_3.addEventListener('click',
-      function (e) {
-        changeImageSize(2 / 3);
+        if (image == null) return;
+        changeZoom(canvas.getZoom() * 1 / 2);
       }, false);
 
     size2.addEventListener('click',
       function (e) {
-        changeImageSize(2);
+        if (image == null) return;
+        changeZoom(canvas.getZoom() * 2);
       }, false);
 
-    size4_3.addEventListener('click',
+    sizeReset.addEventListener('click',
       function (e) {
-        changeImageSize(4 / 3);
+        if (image == null) return;
+        changeZoom(1);
       }, false);
 
     function changeImageSize(ratio) {
@@ -410,20 +410,20 @@ WebFont.load({
         if (object == null) return;
         if (object.type == "textbox") {
           if (object.get('underline')) {
-            object.set('underline',false);
+            object.set('underline', false);
           } else {
-            object.set('underline',true);
+            object.set('underline', true);
           }
           canvas.renderAll();
         }
       }, false);
 
-      fontColor.addEventListener('input',
+    fontColor.addEventListener('input',
       (e) => {
         const object = canvas.getActiveObject();
         if (object == null) return;
         if (object.type == "textbox") {
-          object.set('fill',e.currentTarget.value);
+          object.set('fill', e.currentTarget.value);
           canvas.renderAll();
         }
       }, false);
@@ -465,6 +465,19 @@ WebFont.load({
         object.opacity = e.currentTarget.value;
         canvas.renderAll();
       }, false);
+
+    zoom.addEventListener('input',
+      (e) => {
+        if (image == null) return;
+        changeZoom(e.currentTarget.value / 100);
+      }, false);
+
+    function changeZoom(ratio) {
+      canvas.setZoom(ratio);
+      canvas.setWidth(image.width * ratio);
+      canvas.setHeight(image.height * ratio);
+      zoomValue.innerHTML = Math.floor(ratio * 100);
+    }
 
     zUp.addEventListener('click',
       (e) => {

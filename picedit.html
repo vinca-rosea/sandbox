@@ -37,6 +37,14 @@
                 data-feather="rotate-cw"></i>やり直す</button>
           </div>
         </li>
+        <li class="nav-item position-relative">
+          <div class="btn btn-dark btn-sm d-flex my-2">
+            <i class="feather-icon" data-feather="zoom-out"></i>
+            <input type="range" class="custom-range" min="10" max="1000" value="100" step="1" id="zoom">
+            <i class="feather-icon" data-feather="zoom-in"></i>
+            <span id="zoomValue">100</span>%
+          </div>
+        </li>
       </ul>
       <div>
         <small>©2020 vinca</small><a class="btn" href="https://twitter.com/_vinca_rosea" role="button">
@@ -88,9 +96,8 @@
               <label for="sizeGroup"><i class="feather-icon" data-feather="maximize-2"></i>サイズ変更</label>
               <div class="btn-group" id="sizeGroup">
                 <button class="btn btn-dark btn-sm" id="sizeHalf" type="button">x 1/2</button>
-                <button class="btn btn-dark btn-sm" id="size2_3" type="button">x 2/3</button>
                 <button class="btn btn-dark btn-sm" id="size2" type="button">x 2</button>
-                <button class="btn btn-dark btn-sm" id="size4_3" type="button">x 4/3</button>
+                <button class="btn btn-dark btn-sm" id="sizeReset" type="button">100%に戻す</button>
               </div>
             </div>
           </div>
@@ -175,7 +182,7 @@
               </button>
             </div>
             <div class="d-flex w-100">
-              <label class="control-label w-25" for="textRange">文字サイズ</label>
+              <label class="control-label w-25" for="textRange">サイズ</label>
               <input type="range" class="custom-range w-75" min="10" max="500" step="1" id="textRange">
             </div>
           </div>
