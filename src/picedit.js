@@ -51,6 +51,10 @@ WebFont.load({
     const redo = document.querySelector('#redo');
     const zoom = document.querySelector('#zoom');
     const zoomValue = document.querySelector('#zoomValue');
+    const brightness = document.querySelector('#brightness');
+    const brightnessValue = document.querySelector('#brightnessValue');
+    const contrast = document.querySelector('#contrast');
+    const contrastValue = document.querySelector('#contrastValue');
 
     const canvas = new fabric.Canvas('canvas1');
     const defaultFontName = defaultFont.name;
@@ -60,6 +64,7 @@ WebFont.load({
     const loadfontList = [defaultFont.name];
     const addedTextAndBalloon = [];
     let image;
+    let filters = {};
 
     const sortedKeys =
       _.unzip(
@@ -67,6 +72,12 @@ WebFont.load({
           _.zip(
             _.keys(fontList),
             _.keys(fontList).map((f) => f.toLowerCase())), 1))[0];
+
+    function clearCanvas() {
+      canvas.clear();
+      canvas.clearHistory();
+      filters = {};
+    }
 
     sortedKeys.forEach((key) => {
       const defaultFontOption = document.createElement("option");
@@ -110,7 +121,7 @@ WebFont.load({
           reader.readAsDataURL(fileData);
         }).then((result) => {
           fabric.Image.fromURL(result, (img) => {
-            canvas.clear();
+            clearCanvas();
             canvas.setWidth(img.width);
             canvas.setHeight(img.height);
             img.selectable = false;
@@ -156,7 +167,7 @@ WebFont.load({
         } else {
           const rect = cropBox.getBoundingRect();
           image.cloneAsImage((img) => {
-            canvas.clear();
+            clearCanvas();
             canvas.setWidth(rect.width);
             canvas.setHeight(rect.height);
             img.selectable = false;
@@ -544,60 +555,102 @@ WebFont.load({
 
     invert.addEventListener('click',
       (e) => {
-        e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Invert());
+        e.currentTarget.checked = toggleFilter('Invert');
       }, false);
 
     grayscale.addEventListener('click',
       (e) => {
-        e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Grayscale());
+        e.currentTarget.checked = toggleFilter('Grayscale');
       }, false);
 
     brownie.addEventListener('click',
       (e) => {
-        e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Brownie());
+        e.currentTarget.checked = toggleFilter('Brownie');
       }, false);
 
     vintage.addEventListener('click',
       (e) => {
-        e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Vintage());
+        e.currentTarget.checked = toggleFilter('Vintage');
       }, false);
 
     technicolor.addEventListener('click',
       (e) => {
-        e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Technicolor());
+        e.currentTarget.checked = toggleFilter('Technicolor');
       }, false);
 
     kodachrome.addEventListener('click',
       (e) => {
-        e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Kodachrome());
+        e.currentTarget.checked = toggleFilter('Kodachrome');
       }, false);
 
     polaroid.addEventListener('click',
       (e) => {
-        e.currentTarget.checkd = applyFilter(new fabric.Image.filters.Polaroid());
+        e.currentTarget.checked = toggleFilter('Polaroid');
       }, false);
 
     blackwhite.addEventListener('click',
       (e) => {
-        e.currentTarget.checkd = applyFilter(new fabric.Image.filters.BlackWhite());
+        e.currentTarget.checked = toggleFilter('BlackWhite');
       }, false);
 
-    function applyFilter(filter) {
-      let found = false;
+    brightness.addEventListener('input',
+      (e) => {
+        if (image == null) return;
+        const filter = getOrAddFilter('Brightness');
+        filter.brightness = e.currentTarget.value / 100;
+        brightnessValue.innerHTML = e.currentTarget.value;
+        image.applyFilters();
+        canvas.renderAll();
+      }, false);
+
+    contrast.addEventListener('input',
+      (e) => {
+        if (image == null) return;
+        const filter = getOrAddFilter('Contrast');
+        filter.contrast = e.currentTarget.value / 100;
+        contrastValue.innerHTML = e.currentTarget.value;
+        image.applyFilters();
+        canvas.renderAll();
+      }, false);
+
+    function toggleFilter(type) {
+      let filterOn;
+      if (deleteFilter(type)) {
+        filterOn = false;
+      } else {
+        addFilter(eval(`new fabric.Image.filters.${type}()`));
+        filterOn = true;
+      }
+      image.applyFilters();
+      canvas.renderAll();
+      return filterOn;
+    }
+
+    function addFilter(filter) {
+      image.filters.push(filter);
+      filters[filter.type] = filter;
+    }
+
+    function deleteFilter(type) {
       for (let i = 0, n = image.filters.length; i < n; ++i) {
-        if (image.filters[i].type == filter.type) {
-          found = true;
+        if (image.filters[i].type == type) {
           image.filters.splice(i, 1);
-          image.applyFilters();
-          break;
+          delete filters[type];
+          return true;
         }
       }
-      if (!found) {
-        image.filters.push(filter);
-        image.applyFilters();
+      return false;
+    }
+
+    function getOrAddFilter(type) {
+      const found = filters[type];
+      if (found == null) {
+        const filter = eval(`new fabric.Image.filters.${type}()`);
+        addFilter(filter);
+        return filter;
+      } else {
+        return found;
       }
-      canvas.renderAll();
-      return !found;
     }
 
     menuLoad.addEventListener('click',
