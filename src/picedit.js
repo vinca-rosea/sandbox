@@ -142,15 +142,6 @@ WebFont.load({
         changeZoom(1);
       }, false);
 
-    function changeImageSize(ratio) {
-      if (image == null) return;
-      image.scaleX = image.scaleX * ratio;
-      image.scaleY = image.scaleY * ratio;
-      canvas.setWidth(image.width * image.scaleX);
-      canvas.setHeight(image.height * image.scaleY);
-      canvas.renderAll();
-    }
-
     let cropBox;
     crop.addEventListener('click',
       function (e) {

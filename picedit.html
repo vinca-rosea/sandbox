@@ -93,11 +93,14 @@
             <div class="btn-group-vertical w-100">
               <button class="btn btn-dark btn-sm" id="crop" type="button"><i class="feather-icon"
                   data-feather="crop"></i>切り抜き</button>
-              <label for="sizeGroup"><i class="feather-icon" data-feather="maximize-2"></i>サイズ変更</label>
-              <div class="btn-group" id="sizeGroup">
-                <button class="btn btn-dark btn-sm" id="sizeHalf" type="button">x 1/2</button>
-                <button class="btn btn-dark btn-sm" id="size2" type="button">x 2</button>
-                <button class="btn btn-dark btn-sm" id="sizeReset" type="button">100%に戻す</button>
+              <div class="w-100">
+                <label for="sizeGroup w-25"><i class="feather-icon" data-feather="maximize-2"></i>サイズ</label>
+                <div class="btn-group w-75" id="sizeGroup">
+                  <button class="btn btn-dark btn-sm" id="sizeHalf" type="button">1/2</button>
+                  <button class="btn btn-dark btn-sm" id="size2" type="button">x2</button>
+                  <button class="btn btn-dark btn-sm" id="sizeReset" type="button"><i class="feather-icon"
+                      data-feather="rotate-ccw"></i>100%</button>
+                </div>
               </div>
             </div>
           </div>
@@ -200,12 +203,14 @@
           <h6 class="card-header p-1"><i class="feather-icon" data-feather="box"></i>オブジェクトの操作</h6>
           <div class="card-body bg-dark p-1">
             <div class="btn-group-vertical w-100">
-              <label for="bgZorder">Z位置</label>
-              <div class="btn-group w-100" id="bgZorder">
-                <button class="btn btn-dark btn-sm" id="zUp" type="button"><i class="feather-icon"
-                    data-feather="arrow-up"></i>最前面へ</button>
-                <button class="btn btn-dark btn-sm" id="zDown" type="button">
-                  <i class="feather-icon" data-feather="arrow-down"></i>最背面へ</button>
+              <div class="position-relative w-100">
+                <label for="bgZorder w-25">Z位置</label>
+                <div class="btn-group w-75" id="bgZorder">
+                  <button class="btn btn-dark btn-sm" id="zUp" type="button"><i class="feather-icon"
+                      data-feather="arrow-up"></i>前面</button>
+                  <button class="btn btn-dark btn-sm" id="zDown" type="button">
+                    <i class="feather-icon" data-feather="arrow-down"></i>背面</button>
+                </div>
               </div>
               <div class="position-relative w-100">
                 <button class="btn btn-dark btn-sm d-flex w-100">
