@@ -20,6 +20,7 @@ WebFont.load({
     const addText = document.querySelector('#addText');
     const copyRight = document.querySelector('#copyRight');
     const textRange = document.querySelector('#textRange');
+    const textRangeValue = document.querySelector('#textRangeValue');
     const remove = document.querySelector('#remove');
     const zUp = document.querySelector('#zUp');
     const zDown = document.querySelector('#zDown');
@@ -39,6 +40,7 @@ WebFont.load({
     const menuLoad = document.querySelector('#menuLoad');
     const menuDl = document.querySelector('#menuDl');
     const opacity = document.querySelector('#opacity');
+    const opacityValue = document.querySelector('#opacityValue');
     const matrixTransform = document.querySelector('#matrixTransform');
     const font = document.querySelector('#font');
     const fontBold = document.querySelector('#fontBold');
@@ -290,9 +292,6 @@ WebFont.load({
           fontFamily: defaultFontName,
           lineHeight: 1
         });
-        textBox.on('selected', function () {
-          textRange.value = textBox.fontSize;
-        });
         createObjectPostProcess(textBox);
         canvas.add(textBox);
         canvas.setActiveObject(textBox);
@@ -316,9 +315,6 @@ WebFont.load({
           fontWeight: 'bold',
           breakWords: false
         });
-        textBox.on('selected', function () {
-          textRange.value = textBox.fontSize;
-        });
         createObjectPostProcess(textBox);
         canvas.add(textBox);
         canvas.setActiveObject(textBox);
@@ -331,7 +327,7 @@ WebFont.load({
         if (object == null) return;
         if (object.type == "textbox") {
           object.fontSize = e.currentTarget.value;
-          canvas.setActiveObject(object);
+          textRangeValue.innerHTML = e.currentTarget.value;
         }
         canvas.renderAll();
       }, false);
@@ -462,7 +458,9 @@ WebFont.load({
       (e) => {
         const object = canvas.getActiveObject();
         if (object == null) return;
-        object.opacity = e.currentTarget.value;
+        const opacity = e.currentTarget.value / 100;
+        object.opacity = opacity;
+        opacityValue.innerHTML = e.currentTarget.value;
         canvas.renderAll();
       }, false);
 
@@ -637,10 +635,13 @@ WebFont.load({
 
     function createObjectPostProcess(object) {
       object.on('selected', function () {
-        opacity.value = object.opacity;
+        opacity.value = object.opacity * 100;
+        opacityValue.innerHTML = object.opacity * 100;
         if (object.type == 'textbox') {
           font.value = object.fontFamily;
           fontColor.value = object.get('fill');
+          textRange.value = object.fontSize;
+          textRangeValue.innerHTML = object.fontSize;
         }
       });
     }
