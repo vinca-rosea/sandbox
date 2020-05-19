@@ -48,3 +48,7 @@ body {
     color: #073642;
     background-color: #B58900;
 }
+
+#left-menu label{
+    margin-bottom: 0;
+}
