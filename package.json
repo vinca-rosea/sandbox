@@ -40,6 +40,9 @@
   },
   "dependencies": {
     "fabric-history": "^1.6.0",
-    "lodash": "^4.17.15"
+    "html-webpack-plugin": "^4.3.0",
+    "lodash": "^4.17.15",
+    "pug": "^2.0.4",
+    "pug-loader": "^2.4.0"
   }
 }

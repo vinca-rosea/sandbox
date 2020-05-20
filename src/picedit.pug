@@ -1,0 +1,235 @@
+doctype html
+html(lang='ja')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    link(rel='stylesheet', href='lib/bootstrap-4.4.1-dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href='picedit.css')
+    title picedit(。-∀-)
+  body
+    nav.navbar.navbar-expand-sm.navbar-dark.bg-dark
+      a.navbar-brand(href='#') picedit(。-∀-)
+      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarColor02', aria-controls='navbarColor02', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarColor02.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item.dropdown
+            a#navbarDropdownFile.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='true')
+              i.feather-icon(data-feather='file')
+              | ファイル
+            .dropdown-menu(aria-labelledby='navbarDropdownFile')
+              a#menuLoad.dropdown-item(href='#')
+                i.feather-icon(data-feather='image')
+                | 画像を開く
+              a#menuDl.dropdown-item(href='#')
+                i.feather-icon(data-feather='file')
+                | ファイルの保存
+          li.nav-item.position-relative
+            .btn-group.my-2
+              button#undo.btn.btn-dark.btn-sm(type='button')
+                i.feather-icon(data-feather='rotate-ccw')
+                | 元に戻す
+              button#redo.btn.btn-dark.btn-sm(type='button')
+                i.feather-icon(data-feather='rotate-cw')
+                | やり直す
+          .d-flex.justify-content-center.flex-column.justify-content-center.px-1
+            .d-flex.my-2
+              i.feather-icon(data-feather='zoom-out')
+              input#zoom.custom-range(type='range', min='10', max='1000', value='100', step='1')
+              i.feather-icon(data-feather='zoom-in')
+              span#zoomValue 100
+              | %
+        div
+          small ©2020 vinca
+          a.btn(href='https://twitter.com/_vinca_rosea', role='button')
+            i.feather-icon(data-feather='twitter')
+    .container-fluid.fill
+      .row.fill
+        #left-menu.col-3.fill.overflow-auto
+          .card.mb-1
+            h6.card-header.p-1
+              i.feather-icon(data-feather='plus-circle')
+              | オブジェクトの追加・削除
+            .card-body.bg-dark.p-1
+              .btn-group-vertical.w-100
+                .btn-group(role='group')
+                  button#bgAddObject.btn.btn-dark.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    i.feather-icon(data-feather='plus-circle')
+                    | 追加
+                  .dropdown-menu.w-100(aria-labelledby='bgAddObject')
+                    .btn-group-vertical.w-100
+                      button#balloon1.btn.btn-dark.btn-sm(type='button')
+                        img.svg_icon(src='svg/e0502_1.svg')
+                        | 吹き出し1
+                      button#balloon2.btn.btn-dark.btn-sm(type='button')
+                        img.svg_icon(src='svg/e0198_1.svg')
+                        | 吹き出し2
+                      button#balloon3.btn.btn-dark.btn-sm(type='button')
+                        img.svg_icon(src='svg/e0801_1.svg')
+                        | 吹き出し3
+                      button#clip1.btn.btn-light.btn-sm(type='button')
+                        img.svg_icon(src='svg/reiwa-era-kanji.svg')
+                        | 令和
+                      button#addText.btn.btn-dark.btn-sm(type='button')
+                        i.feather-icon(data-feather='type')
+                        | 文字
+                      button#keikaku.btn.btn-warning.btn-sm(type='button')
+                        i.feather-icon(data-feather='smile')
+                        | 計画通り
+                      button#copyRight.btn.btn-warning.btn-sm(type='button') ©copyright FFXIV
+                button#remove.btn.btn-dark.btn-sm(type='button')
+                  i.feather-icon(data-feather='delete')
+                  | 削除
+          .card.mb-1
+            h6.card-header.p-1
+              i.feather-icon(data-feather='image')
+              | 画像の操作
+            .card-body.bg-dark.p-1
+              .btn-group-vertical.w-100
+                button#crop.btn.btn-dark.btn-sm(type='button')
+                  i.feather-icon(data-feather='crop')
+                  | 切り抜き
+                label(for='sizeGroup')
+                  i.feather-icon(data-feather='maximize-2')
+                  | サイズ
+                #sizeGroup.btn-group
+                  button#sizeHalf.btn.btn-dark.btn-sm(type='button') 1/2
+                  button#size2.btn.btn-dark.btn-sm(type='button') x2
+                  button#sizeReset.btn.btn-dark.btn-sm(type='button')
+                    i.feather-icon(data-feather='rotate-ccw')
+                    | 100%
+                label.control-label(for='brightness') 明るさ
+                .d-flex.justify-content-center.w-100.px-1
+                  input#brightness.custom-range.w-auto.flex-fill(type='range', min='-100', max='100', step='1')
+                  span#brightnessValue
+                  span %
+                label.control-label.text-nowrap(for='contrast') コントラスト
+                .d-flex.justify-content-center.w-100.px-1
+                  input#contrast.custom-range.w-auto.flex-fill(type='range', min='-100', max='100', step='1')
+                  span#contrastValue
+                  span %
+          .card.mb-1
+            h6.card-header.p-1
+              i.feather-icon(data-feather='filter')
+              | 画像フィルター
+            .card-body.bg-dark.p-1
+              .btn-group-vertical.w-100
+                .btn-group(role='group')
+                  button#bgFilter.btn.btn-dark.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                    i.feather-icon(data-feather='plus-circle')
+                    | ON/OFF
+                  .dropdown-menu.w-100(aria-labelledby='bgFilter')
+                    ul.list-group.w-100.p-0
+                      li.list-group-item
+                        .custom-control.custom-switch
+                          input#invert.custom-control-input(type='checkbox')
+                          label.custom-control-label(for='invert') invert
+                      li.list-group-item
+                        .custom-control.custom-switch
+                          input#grayscale.custom-control-input(type='checkbox')
+                          label.custom-control-label(for='grayscale') grayscale
+                      li.list-group-item
+                        .custom-control.custom-switch
+                          input#brownie.custom-control-input(type='checkbox')
+                          label.custom-control-label(for='brownie') brownie
+                      li.list-group-item
+                        .custom-control.custom-switch
+                          input#vintage.custom-control-input(type='checkbox')
+                          label.custom-control-label(for='vintage') vintage
+                      li.list-group-item
+                        .custom-control.custom-switch
+                          input#technicolor.custom-control-input(type='checkbox')
+                          label.custom-control-label(for='technicolor') technicolor
+                      li.list-group-item
+                        .custom-control.custom-switch
+                          input#kodachrome.custom-control-input(type='checkbox')
+                          label.custom-control-label(for='kodachrome') kodachrome
+                      li.list-group-item
+                        .custom-control.custom-switch
+                          input#polaroid.custom-control-input(type='checkbox')
+                          label.custom-control-label(for='polaroid') polaroid
+                      li.list-group-item
+                        .custom-control.custom-switch
+                          input#blackwhite.custom-control-input(type='checkbox')
+                          label.custom-control-label(for='blackwhite') blackwhite
+          .card.mb-1
+            h6.card-header.p-1
+              i.feather-icon(data-feather='type')
+              | 文字の操作
+            .card-body.bg-dark.p-1
+              .d-flex.w-100
+                button#fontBold.btn.btn-dark.btn-sm(type='button')
+                  i.feather-icon(data-feather='bold')
+                button#fontItalic.btn.btn-dark.btn-sm(type='button')
+                  i.feather-icon(data-feather='italic')
+                button#fontUnderline.btn.btn-dark.btn-sm(type='button')
+                  i.feather-icon(data-feather='underline')
+                button.btn.btn-dark.btn-sm
+                  input#fontColor(type='color', value='#000000')
+              label.control-label.text-nowrap(for='textRange') サイズ
+              .d-flex.justify-content-center.w-100.px-1
+                i.feather-icon(data-feather='zoom-out')
+                input#textRange.custom-range.w-auto.flex-fill(type='range', min='10', max='500', step='1')
+                i.feather-icon(data-feather='zoom-in')
+                span#textRangeValue
+                span px
+            select#font.custom-select
+            button#matrixTransform.btn.btn-dark.btn-sm(type='button')
+              i.feather-icon(data-feather='arrow-up')
+              | 横書き→縦書き
+          .card.mb-1
+            h6.card-header.p-1
+              i.feather-icon(data-feather='box')
+              | オブジェクトの操作
+            .card-body.bg-dark.p-1
+              label(for='bgZorder') Z位置
+              #bgZorder.btn-group.w-100
+                button#zUp.btn.btn-dark.btn-sm(type='button')
+                  i.feather-icon(data-feather='arrow-up')
+                  | 前面
+                button#zDown.btn.btn-dark.btn-sm(type='button')
+                  i.feather-icon(data-feather='arrow-down')
+                  | 背面
+              label.control-label.text-nowrap(for='opacity') 透明度
+              .d-flex.justify-content-center.w-100.px-1
+                input#opacity.custom-range.w-auto.flex-fill(type='range', min='0', max='100', step='1')
+                span#opacityValue
+                | %
+        #canvasWrapper.col.fill.overflow-auto
+          #fileDialog.modal(tabindex='-1', role='dialog')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  h6.modal-title 加工するファイルを開いてください
+                  button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') ×
+                .modal-body
+                  .custom-file
+                    input#file.custom-file-input(type='file')
+                    label.custom-file-label(for='file') Choose file
+          #dlDialog.modal(tabindex='-1', role='dialog')
+            .modal-dialog(role='document')
+              .modal-content
+                .modal-header
+                  h6.modal-title ファイルの保存
+                  button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') ×
+                .modal-body
+                  .btn-group-vertical.w-100
+                    button#dl.btn.btn-dark.btn-sm(href='#')
+                      i.feather-icon(data-feather='download')
+                      | 画像の保存
+                    button#gifAnimation.btn.btn-dark.btn-sm(href='#')
+                      i.feather-icon(data-feather='film')
+                      | Gifアニメーションの保存
+          canvas#canvas1
+    script(src='https://code.jquery.com/jquery-3.4.1.slim.min.js', integrity='sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n', crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js', integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo', crossorigin='anonymous')
+    script(src='lib/bootstrap-4.4.1-dist/js/bootstrap.min.js', integrity='sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6', crossorigin='anonymous')
+    script(src='https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/fabric.js/3.6.3/fabric.min.js')
+    script(src='lib/LZWEncoder.js')
+    script(src='lib/NeuQuant.js')
+    script(src='lib/GIFEncoder.js')
+    script(src='lib/b64.js')
+    script(src='lib/feather.min.js')
